@@ -1,0 +1,145 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+/* 
+    This file contains the map class
+    This class creates and handles a map instance
+ */
+public class Map : MonoBehaviour {
+
+
+// These variables most be added in editor!
+
+private GameObject wall_prefab;
+private GameObject breakable_prefab;
+private GameObject startpos_prefab;
+private GameObject floor_prefab;
+private GameObject goal_prefab;
+private GameObject door_prefab;
+private GameObject powerup_prefab;
+private GameObject Map_parent;
+
+private int start_poses;
+
+private Blocks[,] array_representation;
+
+public Map(int _start_poses, int x, int y, GameObject parent){
+    // init a map
+    
+    // load  variables
+    start_poses = _start_poses;
+    Map_parent = parent;
+    
+    startpos_prefab = (GameObject) Resources.Load("Startpos",typeof(GameObject));
+   
+    powerup_prefab = (GameObject) Resources.Load("PowerUp",typeof(GameObject));
+    
+    breakable_prefab = (GameObject) Resources.Load("Breakable", typeof(GameObject));
+
+    door_prefab = (GameObject) Resources.Load("Door",typeof(GameObject));
+    
+    goal_prefab = (GameObject) Resources.Load("Goal",typeof(GameObject));
+
+    floor_prefab = (GameObject) Resources.Load("Floor",typeof(GameObject));
+    
+    wall_prefab = (GameObject) Resources.Load("Wall",typeof(GameObject));
+    
+    
+    // create map
+    //minimum values are 2x2 map due to calculations below
+    // a clamp if you will ;)
+    if (x <= 2){
+        x = 2;
+    }
+    if( y <= 2){
+        y = 2;
+    }
+
+    array_representation = new Blocks[x,y];
+
+
+    create_map(x,y);
+}
+
+
+private void create_map(int x, int y){
+    
+    // player start pos
+    new_instance(1, 0, y/2, startpos_prefab);
+    array_representation[1, y/2] = Blocks.Startpos;
+    if(start_poses > 1){
+    // add more start poses
+
+    }
+
+    for(int i_x = 0; i_x < x; i_x++){
+        for(int i_y = 0; i_y < y; i_y++){
+
+            // Create floor
+            new_instance(i_x, -1, i_y, floor_prefab);
+        
+               
+
+           
+             // Create all wall limits 
+            if(i_x == 0 || i_x == x -1 || i_y == 0 || i_y == y -1){
+        
+            // add door and goal (only once per map)
+            if(i_y == y/2 && i_x == x -1){
+                array_representation[i_x, i_y] = Blocks.Door;
+                 new_instance(i_x, 0, i_y, door_prefab);
+                 new_instance(i_x+1, 0, i_y, goal_prefab);
+            } else {
+            array_representation[i_x, i_y] = Blocks.Wall;
+            new_instance(i_x, 0, i_y, wall_prefab);
+           
+            }
+
+            } else {
+
+                // add wall in center of map (random later on!)
+                 if(i_x % 2 == 0 && i_y % 2 == 0 && i_x != x-2 && i_y != y-2){
+             
+                 array_representation[i_x, i_y] = Blocks.Wall;
+                 new_instance(i_x, 0, i_y, wall_prefab);
+                 } else {
+
+                // add breakables
+                if(!start_next_to(i_x, i_y)){
+                  array_representation[i_x, i_y] = Blocks.Breakable;
+                new_instance(i_x, 0, i_y, breakable_prefab);
+                
+                }
+                }
+            }
+        } 
+    }
+}
+
+  private bool start_next_to(int x, int y){
+   if( array_representation[x-1, y] == Blocks.Startpos){
+       return true;
+   }
+   if( array_representation[x+1, y] == Blocks.Startpos){
+       return true;
+   }
+   if( array_representation[x, y+1] == Blocks.Startpos){
+       return true;
+   }
+   if( array_representation[x, y-1] == Blocks.Startpos){
+       return true;
+   }
+   if( array_representation[x, y] == Blocks.Startpos){
+       return true;
+   }
+   return false;
+        }
+
+
+private void new_instance(int x, int y, int z, GameObject prefab){
+   GameObject temp_floor = Instantiate(prefab, new Vector3(x, y, z), Quaternion.identity) ; // create new prefab instance
+    temp_floor.transform.SetParent(Map_parent.transform); // set parent
+}
+
+}
