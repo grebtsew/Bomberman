@@ -44,5 +44,8 @@ public class DisableTriggerOnPlayerExit : MonoBehaviour
         { // When the player exits the trigger area
             GetComponent<Collider> ().isTrigger = false; // Disable the trigger
         }
+
     }
+
+
 }

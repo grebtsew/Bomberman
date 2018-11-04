@@ -19,13 +19,7 @@ Animationer
 
 GUI
 
- Autogenerate map
-
- Next map
-
 Build ais
-
-gravity ide, with sophie boob physics, nice idea!!!!!
 
  Make the bombs "pushable", so you can escape bombs next to you and push them towards your opponent
 
@@ -35,13 +29,7 @@ Menu
 
 Phone ready
 
-Add breakable blocks that get destroyed by the explosions
 
-Create interesting powerups
-
-Add lives, or a way to earn them
-
-camera follow
 
  **/
 
@@ -51,12 +39,15 @@ camera follow
 	// Use this for initialization
 	void Start () {
 		// increase map size over maps
-		map = new Map(1,11,11, map_parent);
+
+			if(PlayerPrefs.GetInt("current_level").ToString().Length == 0){
+				 PlayerPrefs.SetInt("current_level", 1);
+				 }
+
+		int level = PlayerPrefs.GetInt("current_level");
+
+		map = new Map(1*level,11 ,11 , map_parent);
 
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
 }

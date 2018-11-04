@@ -33,9 +33,7 @@ public Map(int _start_poses, int x, int y, GameObject parent){
     
     startpos_prefab = (GameObject) Resources.Load("Startpos",typeof(GameObject));
    
-    powerup_prefab = (GameObject) Resources.Load("PowerUp",typeof(GameObject));
-    
-    breakable_prefab = (GameObject) Resources.Load("Breakable", typeof(GameObject));
+   breakable_prefab = (GameObject) Resources.Load("Breakable", typeof(GameObject));
 
     door_prefab = (GameObject) Resources.Load("Door",typeof(GameObject));
     
@@ -65,12 +63,45 @@ public Map(int _start_poses, int x, int y, GameObject parent){
 
 private void create_map(int x, int y){
     
+    /* Yet again ugly code but fast working for now */
     // player start pos
-    new_instance(1, 0, y/2, startpos_prefab);
-    array_representation[1, y/2] = Blocks.Startpos;
-    if(start_poses > 1){
-    // add more start poses
+    GameObject t = new_instance(1, 0, y/2, startpos_prefab);
+    t.GetComponent<startpos_script>().player_controller = true;
 
+    array_representation[1, y/2] = Blocks.Startpos;
+
+
+    if(start_poses > 1){
+    new_instance(1, 0, y-2, startpos_prefab);
+    array_representation[1, y-2] = Blocks.Startpos;
+    
+    if(start_poses > 2){
+    //add four more
+     new_instance(1, 0, 1, startpos_prefab);
+    array_representation[1, 1] = Blocks.Startpos;
+
+     if(start_poses > 3){
+    new_instance(x-2, 0, y-2, startpos_prefab);
+    array_representation[x-2, y-2] = Blocks.Startpos;
+    if(start_poses > 4){
+    new_instance(x-2, 0, 1, startpos_prefab);
+    array_representation[x-2, 1] = Blocks.Startpos;
+   
+    if(start_poses > 5){
+        new_instance(x/2, 0, 1, startpos_prefab);
+    array_representation[(x)/2, 1] = Blocks.Startpos;
+    }
+    if(start_poses > 6){
+        new_instance(x/2, 0, y-2, startpos_prefab);
+    array_representation[(x)/2, y-2] = Blocks.Startpos;
+    }
+    if(start_poses > 7){            // max 8 pers
+        new_instance(x-2, 0, y/2, startpos_prefab);
+    array_representation[x-2, y/2] = Blocks.Startpos;
+    }
+    }
+     }
+    }
     }
 
     for(int i_x = 0; i_x < x; i_x++){
@@ -137,9 +168,10 @@ private void create_map(int x, int y){
         }
 
 
-private void new_instance(int x, int y, int z, GameObject prefab){
+private GameObject new_instance(int x, int y, int z, GameObject prefab){
    GameObject temp_floor = Instantiate(prefab, new Vector3(x, y, z), Quaternion.identity) ; // create new prefab instance
     temp_floor.transform.SetParent(Map_parent.transform); // set parent
+    return temp_floor;
 }
 
 }
