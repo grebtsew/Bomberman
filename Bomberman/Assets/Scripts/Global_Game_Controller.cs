@@ -46,7 +46,7 @@ Phone ready
 
 		int level = PlayerPrefs.GetInt("current_level");
 
-		map = new Map(1*level,11 ,11 , map_parent);
+		map = new Map(7,11 ,11 , map_parent);
 
 	}
 

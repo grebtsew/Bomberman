@@ -1,0 +1,4 @@
+public enum AI_STATES{
+    DODGE, BOMB, POWERUP, KICK, FOLLOW, IDLE, CENTER
+
+}
