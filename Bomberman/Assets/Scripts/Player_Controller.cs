@@ -94,7 +94,11 @@ public class Player_Controller : Controller
         if (canDropBombs && (Input.GetKeyDown (KeyCode.KeypadEnter) || Input.GetKeyDown (KeyCode.Return)))
         { //Drop Bomb. For Player 2's bombs, allow both the numeric enter as the return key or players 
             //without a numpad will be unable to drop bombs
+           if(player.bombs != 0){
+
+           player.bombs--;
             DropBomb ();
+            }
         }
     }
 
@@ -110,6 +114,7 @@ public class Player_Controller : Controller
         bombPrefab.transform.rotation);
 
         go.GetComponent<Bomb>().explode_size = player.explosion_power;
+        go.GetComponent<Bomb>().player = player;
         }
     }
 }

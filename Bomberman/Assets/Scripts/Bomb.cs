@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class Bomb : MonoBehaviour {
 
+public Player player;
+
 public int explode_size = 2;
 public GameObject explosionPrefab;
 private bool exploded = false;
@@ -36,6 +38,7 @@ GetComponent<MeshRenderer>().enabled = false; //2
 exploded = true; 
 transform.Find("Collider").gameObject.SetActive(false); //3
 Destroy(gameObject, .3f); //4
+player.bombs++;
 } 
 
 private IEnumerator CreateExplosions(Vector3 direction) 

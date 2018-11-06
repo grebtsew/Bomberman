@@ -19,18 +19,21 @@ Animationer
 
 GUI
 
-Build ais
-
- Make the bombs "pushable", so you can escape bombs next to you and push them towards your opponent
-
- Limit the amount of bombs that can be dropped
+Make the bombs "pushable", so you can escape bombs next to you and push them towards your opponent
 
 Menu
 
 Phone ready
 
-
-
+AI fixes:
+Always see bomb bug, player in the way! see through
+Dose to higher sides, also do a nextpos check and add to dose!
+Calculate escape path
+Calculate safe pos
+Detect on bomb!
+ follow
+ level
+ powerup
  **/
 
 	public GameObject map_parent;

@@ -139,7 +139,7 @@ private void create_map(int x, int y){
                 // add breakables
                 if(!start_next_to(i_x, i_y)){
                   array_representation[i_x, i_y] = Blocks.Breakable;
-                new_instance(i_x, 0, i_y, breakable_prefab);
+              //  new_instance(i_x, 0, i_y, breakable_prefab);
                 
                 }
                 }
