@@ -25,15 +25,13 @@ Menu
 
 Phone ready
 
-AI fixes:
+AI Possible fixes:
 Always see bomb bug, player in the way! see through
 Dose to higher sides, also do a nextpos check and add to dose!
-Calculate escape path
 Calculate safe pos
-Detect on bomb!
- follow
- level
- powerup
+follow
+level
+powerup
  **/
 
 	public GameObject map_parent;
@@ -49,7 +47,7 @@ Detect on bomb!
 
 		int level = PlayerPrefs.GetInt("current_level");
 
-		map = new Map(7,11 ,11 , map_parent);
+		map = new Map(3,11 ,11 , map_parent);
 
 	}
 

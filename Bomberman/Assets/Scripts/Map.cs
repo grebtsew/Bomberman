@@ -11,6 +11,9 @@ public class Map : MonoBehaviour {
 
 // These variables most be added in editor!
 
+public int width;
+public int height;
+
 private GameObject wall_prefab;
 private GameObject breakable_prefab;
 private GameObject startpos_prefab;
@@ -27,6 +30,9 @@ private Blocks[,] array_representation;
 public Map(int _start_poses, int x, int y, GameObject parent){
     // init a map
     
+    width = x;
+    height = y;
+
     // load  variables
     start_poses = _start_poses;
     Map_parent = parent;
@@ -60,6 +66,9 @@ public Map(int _start_poses, int x, int y, GameObject parent){
     create_map(x,y);
 }
 
+public bool is_walkable(int x, int y){
+    return array_representation[x,y] != Blocks.Wall;
+}
 
 private void create_map(int x, int y){
     
@@ -139,7 +148,7 @@ private void create_map(int x, int y){
                 // add breakables
                 if(!start_next_to(i_x, i_y)){
                   array_representation[i_x, i_y] = Blocks.Breakable;
-              //  new_instance(i_x, 0, i_y, breakable_prefab);
+                new_instance(i_x, 0, i_y, breakable_prefab);
                 
                 }
                 }
