@@ -35,7 +35,7 @@ powerup
  **/
 
 	public GameObject map_parent;
-	private Map map;
+	public Map map;
 
 	// Use this for initialization
 	void Start () {
@@ -47,7 +47,7 @@ powerup
 
 		int level = PlayerPrefs.GetInt("current_level");
 
-		map = new Map(3,11 ,11 , map_parent);
+		map = new Map(2,11 ,11 , map_parent);
 
 	}
 

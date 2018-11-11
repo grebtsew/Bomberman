@@ -30,8 +30,7 @@ private Blocks[,] array_representation;
 public Map(int _start_poses, int x, int y, GameObject parent){
     // init a map
     
-    width = x;
-    height = y;
+   
 
     // load  variables
     start_poses = _start_poses;
@@ -60,6 +59,9 @@ public Map(int _start_poses, int x, int y, GameObject parent){
         y = 2;
     }
 
+     width = x;
+    height = y;
+
     array_representation = new Blocks[x,y];
 
 
@@ -67,6 +69,7 @@ public Map(int _start_poses, int x, int y, GameObject parent){
 }
 
 public bool is_walkable(int x, int y){
+   
     return array_representation[x,y] != Blocks.Wall;
 }
 
@@ -78,7 +81,6 @@ private void create_map(int x, int y){
     t.GetComponent<startpos_script>().player_controller = true;
 
     array_representation[1, y/2] = Blocks.Startpos;
-
 
     if(start_poses > 1){
     new_instance(1, 0, y-2, startpos_prefab);

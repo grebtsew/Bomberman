@@ -7,74 +7,47 @@ public class Ai_Controller : Controller
 {
 
 public GameObject bombPrefab;
-public AI_MODES mode;
-public AI_STATES state = AI_STATES.IDLE;
-public int level = 0; // difficult
+private AI_STATES state = AI_STATES.IDLE;
+
 private bool dodge; // avoid bombs
 
-public bool aggressive = true;
+public bool drop_bomb_on_player;
+
+public AI_MOVE_MODE move_mode;
+
 private bool on_bomb = false;
 private bool bomb; // drop bombs
 private bool powerup; // pick up powerup
-private bool kick; // kick bombs
 private bool follow; // follow other players to trap them
 
 private ArrayList wait_bombs = new ArrayList();
 private Vector3 next_pos;
 private Vector3 next_dir;
-
-private Vector3 goal;
 private ArrayList path = new ArrayList();
-
 private bool acting = false;
-
-private ArrayList bomb_list;
-
 private struct dir_dist{
    public Vector3 dir;
    public int dist;
    public string tag;
    public int path_value ;
 }
-
-private bool random;
-private bool farm;
 private Player player;
 private Rigidbody rigidBody;
  private Animator animator;
- private bool defensive;
- private CapsuleCollider collider;
 private ArrayList detections;
 
 // Use this for initialization
 	void Start () {
-        collider = GetComponent<CapsuleCollider>();
         player = GetComponent<Player>();
         rigidBody = GetComponent<Rigidbody> ();
          animator = transform.Find ("PlayerModel").GetComponent<Animator> ();
 
-		switch(mode){
-            case AI_MODES.FARM: // wants to destroy boxes, and loot
-            dodge = true;
-            bomb = true;
-            powerup = true;
-            follow = false;
-            break;
+        // some intresting variables to shift
+        bomb = true;
+        follow = true;
+        powerup = true;
+        dodge = true;
 
-            case AI_MODES.DODGE: // wont drop bombs only avoid bombs and loot
-            dodge = true;
-            bomb = false;
-            powerup = true;
-            follow = false;
-            break;
-
-            case AI_MODES.KILL: // will try to kill you!
-            dodge = true;
-            bomb = true;
-            powerup = true;
-            follow = true;
-            break;
-        }
 	}
 	
     private bool bombs_exist(){
@@ -120,13 +93,10 @@ private ArrayList detections;
             player.bombs--;
             state = AI_STATES.IDLE;
             break;
-            case AI_STATES.POWERUP:
-            move_path();
-            break;
+           
             case AI_STATES.IDLE:
 
             /* When idle decide next move, see interrupt levels below */
-
             //Do raycast in all 4 directions to see what we can do...
 
             detections = get_closest_collisions(transform.position);
@@ -147,12 +117,11 @@ private ArrayList detections;
                     if(wait_bombs.Count > 0){
                     if(!bombs_exist()){
                         wait_bombs.Clear();
-                    }
+                       }
                     }
                 }
-                
             }
-
+                
             //2 pick up powerup, if accessable
             if(powerup){
                  if(contains_tag(detections, "powerup")){
@@ -160,10 +129,10 @@ private ArrayList detections;
                          if(d.tag == "powerup"){
                              path.Clear(); // currently removes the goal, maybe not the smartest idea
                              path.Add(transform.position + d.dir);
-                            break;   
+                            state = AI_STATES.FOLLOW;
+                            break;            
+                         }
                      }
-                 }
-                 state = AI_STATES.POWERUP;
                  }
              }
 
@@ -178,26 +147,47 @@ private ArrayList detections;
                 }
             }
             
-           
             //4 Set a ai goal, a position the bot will try to reach
             if(follow){
                 if(path.Count == 0){ // ready for next goal
-
-                if(aggressive){ // follow player
-                   path  =  calculate_path_to(transform.position, Round(FindObjectOfType<Player>().transform.position));
-                } else if(random) {
-                     path  = calculate_path_to(transform.position, get_random_walkable_node_position());
-                } else if(farm) {// find good place to bomb
-                     path  = calculate_next_closest_breakable(transform.position);
-                } else if(defensive){
-                  path = calculate_safe_position_path(transform.position);
+                
+                switch(move_mode){
+                    case AI_MOVE_MODE.AGGRESSIVE:
+                        // find player
+                        foreach(Player_Controller p in FindObjectsOfType<Player_Controller>()){
+                                if(p.isActiveAndEnabled){
+                                     path  =  calculate_path_to(transform.position, Round(p.transform.position));
+                                     break;
+                                }
+                        }
+                        
+                    break;
+                    case AI_MOVE_MODE.RANDOM:               
+                      path  = calculate_path_to(transform.position, get_random_walkable_node_position());
+                    break;
+                    case AI_MOVE_MODE.FARM:
+                          path  = calculate_next_closest_breakable(transform.position);
+                    break;
+                    case AI_MOVE_MODE.DEFENSIVE:
+                        path = calculate_safe_position_path(transform.position);
+                    break;
                 }
-                  state = AI_STATES.FOLLOW;
-                  break;
-            }
-            }
+               
+                } else {
+                  
+                    if(Vector3.Distance(transform.position, (Vector3)path[0]) > 1){
+                        // this means we have dodged a bomb and dont have a continous path to goal
+                        // we should update path, but i will clear for now
+                        path.Clear();
+                    
+                    } else {
+                        
+                    state = AI_STATES.FOLLOW;
+                    break;
+                    }
 
-           
+                }             
+            }
 
             //5 Center - center player to box to detect correctly!
             if(transform.position != Round(transform.position)){
@@ -210,34 +200,81 @@ private ArrayList detections;
 
     private ArrayList calculate_next_closest_breakable(Vector3 position)
     {
-        // walk through nodes and find breakables at zero distance, don't use current position!
-        throw new NotImplementedException();
+        /* Create an arraylist of size =1 that shows way to a breakable */
+        ArrayList p = new ArrayList();
+        dir_dist next = new dir_dist();
+        bool next_set = false;
+        foreach(dir_dist d in get_closest_collisions(position)){
+            if(next.dist == 0){
+                    next = d;
+                    next_set = true;
+                    continue;
+            }
+            
+            if(d.tag == "Breakable"){
+                if(d.dist < next.dist){
+                    next = d;
+                   
+                }
+            } 
+        }
+
+        if(next_set){
+             p.Add(position + next.dir);
+        } 
+       
+        return p;
     }
 
   private ArrayList calculate_path_to(Vector3 startpos, Vector3 goal){
         // calculate a path between current pos and goal,
         // save as arraylist
-        return null;
-    }
+        bool done = false;
+        ArrayList result = new ArrayList();
+        Vector3 currentpos = startpos;
+        Map temp = FindObjectOfType<Global_Game_Controller>().map;
+       
 
+        while (!done){
+            if(currentpos == goal){
+                done = true;
+                continue;
+            }
+
+            foreach(dir_dist d in get_closest_collisions(currentpos)){
+                Vector3 temp_pos = currentpos+d.dir;
+                 if(temp.is_walkable((int)temp_pos.x,(int) temp_pos.z)){
+                if(Math.Abs(goal.x- temp_pos.x) < Math.Abs(goal.x-currentpos.x) || 
+                Math.Abs(goal.z-temp_pos.z) < Math.Abs(goal.z-currentpos.z)){
+               
+                    result.Add(currentpos);
+                    currentpos = temp_pos;
+                    break;
+                }
+                }
+            }
+        }
+        return result;
+    }
 
     private Vector3 get_random_walkable_node_position()
     {
         Vector3 res = new Vector3();
         bool found = false;
-        Map m = FindObjectOfType<Map>();
+        Map m = FindObjectOfType<Global_Game_Controller>().map;
 
         while(!found){
-            Vector3 test = new Vector3(UnityEngine.Random.Range(1,m.width-2), 0,UnityEngine.Random.Range(1,m.height-2));
+            Vector3 test = new Vector3(UnityEngine.Random.Range(1, m.width-1), 0,UnityEngine.Random.Range(1,m.height-1));
+           
             if(m.is_walkable((int)test.x, (int)test.z)){
                 found = true;
                 res = test;
             }
         }
+       
         return res;
     }
 
-  
     private ArrayList calculate_safe_position_path(Vector3 start_pos){
     // search all nodes for a 4:way crossing
     // move towards it or the next best crossing
@@ -294,24 +331,49 @@ private ArrayList detections;
     private void move_path(){
          // move along a path of vector3
         // always do checks for bombs on the way and avoid
-       
-        Vector3 targetVector = (Vector3)path[0] - transform.position;
-        Vector3 direction = targetVector.normalized;
 
-        move(transform.position,direction);
+
+        if(path.Count != 0){
         
+        Vector3 direction =  ((Vector3)path[0] - Round(transform.position)).normalized;
+         
+            ArrayList temp = get_closest_collisions((Vector3) path[0]); // check bomb next
+            ArrayList temp2 = get_closest_collisions((Vector3) transform.position); // check collision next 
+            bool temp2_res = false;
+
+            foreach(dir_dist d in temp2){
+                if(d.dir == direction){
+                    if(d.dist == 0){
+                        if(d.tag != "powerup"){
+                        temp2_res = true;
+                        }
+                    }
+                }
+            }                 
+
+          if( !contains_tag(temp, "Bomb") && !contains_tag(temp, "Explosion") && !temp2_res){
+
+             move(direction, (Vector3)path[0]);
+
+             } else {
+                if(transform.position != Round(transform.position)){
+                    acting = true;
+                    state = AI_STATES.CENTER;   
+            } else {
+                state = AI_STATES.IDLE;
+            }
+        }
+            
+        } else {
+            state = AI_STATES.IDLE;
+            return;
+        }
+
         // done!
         if(Vector3.Distance(transform.position, (Vector3) path[0]) == 0){
+        
             path.RemoveAt(0);
             
-            // do bomb check
-               bomb_check();
-
-            if(path.Count == 0){
-             acting = false; // reached goal
-             state = AI_STATES.IDLE; // ai idle    
-            }
-                   
         }
     }
 
@@ -383,14 +445,11 @@ private ArrayList detections;
     {
         detections = get_closest_collisions(transform.position);
        foreach(dir_dist d in detections){
-           if( d.tag == "Breakable" || (d.tag == "Player" && aggressive)){
+           if( d.tag == "Breakable" || (d.tag == "Player" && drop_bomb_on_player)){
                if(d.dist < player.explosion_power){
-                   Debug.Log("Ready");
+                 
                    ArrayList temp = calculate_escape_path(transform.position,transform.position);
                     
-                    foreach(Vector3 v in temp){
-                        Debug.Log(v);
-                    }
                    if(temp.Count >= 2){
                        return true;
                    }  
@@ -487,7 +546,7 @@ private ArrayList detections;
 
         // move to exact location over deltatime
         Vector3 movePosition = Vector3.MoveTowards(transform.position, position, player.moveSpeed * Time.deltaTime);
- 
+
         rigidBody.MovePosition(movePosition);
 
         // player rotation
@@ -507,11 +566,9 @@ private ArrayList detections;
         // done!
         if(Vector3.Distance(transform.position, position) == 0){
              acting = false; // reached goal
-             if(path.Count == 0){
+            
              state = AI_STATES.IDLE; // ai idle 
-             }else{
-            state = AI_STATES.FOLLOW;
-             }
+            
 
         }
     }

@@ -45,7 +45,6 @@ public class powerup_script : MonoBehaviour {
 
 			Player player = collision.collider.GetComponent<Player>();
 
-			Debug.Log(powerup);
 
 			switch(powerup){
 			case POWERUPS.BOMB:
