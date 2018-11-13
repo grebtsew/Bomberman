@@ -13,12 +13,10 @@ public class Player_Controller : Controller
 
     //Prefabs
     public GameObject bombPrefab;
-
     //Cached components
     private Rigidbody rigidBody;
     private Transform myTransform;
     private Animator animator;
-
     private Player player;
 
     // Use this for initialization
@@ -50,10 +48,7 @@ public class Player_Controller : Controller
         }
 
         //Depending on the player number, use different input for moving
-       
-        
         UpdatePlayer2Movement ();
-        
     }
 
    

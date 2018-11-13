@@ -7,8 +7,6 @@ public class Global_Game_Controller : MonoBehaviour {
 
 /** TODOLIST
 
-change character and animations
-
 animated Text
 
 Boss battles
@@ -25,13 +23,7 @@ Menu
 
 Phone ready
 
-AI Possible fixes:
-Always see bomb bug, player in the way! see through
-Dose to higher sides, also do a nextpos check and add to dose!
-Calculate safe pos
-follow
-level
-powerup
+Fix ai stack overflow buggs
  **/
 
 	public GameObject map_parent;
@@ -47,7 +39,7 @@ powerup
 
 		int level = PlayerPrefs.GetInt("current_level");
 
-		map = new Map(2,11 ,11 , map_parent);
+		map = new Map(1,11 ,11 , map_parent);
 
 	}
 

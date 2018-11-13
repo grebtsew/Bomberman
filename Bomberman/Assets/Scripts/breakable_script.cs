@@ -6,6 +6,8 @@ public class breakable_script : MonoBehaviour {
 
 	public GameObject powerup_prefab;
 
+	public ParticleSystem explosion;
+
 	// Use this for initialization
 	void Start () {
 		 powerup_prefab = (GameObject) Resources.Load("PowerUp",typeof(GameObject));
@@ -27,7 +29,10 @@ public class breakable_script : MonoBehaviour {
         if (collision.collider.CompareTag ("Explosion"))
         {
            
+		   
             Destroy(gameObject); // 3  
+		 Instantiate(explosion, transform.position, Quaternion.identity);
+		
 
 			if(Random.Range(0.0f, 1.0f)> 0.7f){
 			

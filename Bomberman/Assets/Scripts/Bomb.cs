@@ -7,12 +7,14 @@ public class Bomb : MonoBehaviour {
 
 public Player player;
 
+private Rigidbody rb;
 public int explode_size = 2;
 public GameObject explosionPrefab;
 private bool exploded = false;
 
 	// Use this for initialization
 	void Start () {
+    rb = GetComponent<Rigidbody>();
 		Invoke("Explode", 3f);
 	}
 	
@@ -96,7 +98,7 @@ if (!exploded && collision.collider.CompareTag("Explosion"))
  
   CancelInvoke("Explode"); // 2
    Explode(); // 3
-}  
+} 
 }
 
 }

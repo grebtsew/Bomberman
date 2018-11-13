@@ -39,6 +39,8 @@ public GlobalStateManager globalManager;
 
     public float moveSpeed = 5f;
    
+    public ParticleSystem Explosion;
+
     public int bombs = 2;
     //Amount of bombs the player has left to drop, gets decreased as the player
     //drops a bomb, increases as an owned bomb explodes
@@ -49,6 +51,8 @@ public GlobalStateManager globalManager;
     public int explosion_power = 2;
 
     public bool dead = false;
+
+    public bool respawning = false;
 
     // Use this for initialization
     void Start ()
@@ -64,10 +68,15 @@ public GlobalStateManager globalManager;
      
         if (collision.collider.CompareTag ("Explosion"))
         {
-          
+          lifes--;
+
+          if(lifes == 0){
             dead = true; // 1
-           
             Destroy(gameObject); // 3  
+            } else {
+            respawning = true;
+             }
+            Instantiate(Explosion,transform.position, Quaternion.identity);
         }
     }
 }
