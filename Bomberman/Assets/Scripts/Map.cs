@@ -8,7 +8,6 @@ using UnityEngine;
  */
 public class Map : MonoBehaviour {
 
-
 // These variables most be added in editor!
 
 public int width;
@@ -27,11 +26,9 @@ private int start_poses;
 
 private Blocks[,] array_representation;
 
-public Map(int _start_poses, int x, int y, GameObject parent){
+public void construct(int _start_poses, int x, int y, GameObject parent){
     // init a map
     
-   
-
     // load  variables
     start_poses = _start_poses;
     Map_parent = parent;
@@ -59,6 +56,10 @@ public Map(int _start_poses, int x, int y, GameObject parent){
         y = 2;
     }
 
+    if(_start_poses >= 7){
+        start_poses = 7;
+    }
+
      width = x;
     height = y;
 
@@ -77,7 +78,7 @@ private void create_map(int x, int y){
     
     /* Yet again ugly code but fast working for now */
     // player start pos
-    GameObject t = new_instance(1, 0, y/2, startpos_prefab);
+    GameObject t = new_instance(1, 0, y/2 +  (y % 2), startpos_prefab);
     t.GetComponent<startpos_script>().player_controller = true;
 
     array_representation[1, y/2] = Blocks.Startpos;
@@ -132,6 +133,7 @@ private void create_map(int x, int y){
                 array_representation[i_x, i_y] = Blocks.Door;
                  new_instance(i_x, 0, i_y, door_prefab);
                  new_instance(i_x+1, 0, i_y, goal_prefab);
+                 // add paper powerup here
             } else {
             array_representation[i_x, i_y] = Blocks.Wall;
             new_instance(i_x, 0, i_y, wall_prefab);
@@ -173,6 +175,12 @@ private void create_map(int x, int y){
        return true;
    }
    if( array_representation[x, y] == Blocks.Startpos){
+       return true;
+   }
+   if( array_representation[x-1, y-1] == Blocks.Startpos){
+       return true;
+   }
+   if( array_representation[x+1, y+1] == Blocks.Startpos){
        return true;
    }
    return false;

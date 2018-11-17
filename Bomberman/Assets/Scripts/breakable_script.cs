@@ -29,15 +29,13 @@ public class breakable_script : MonoBehaviour {
         if (collision.collider.CompareTag ("Explosion"))
         {
            
-		   
-            Destroy(gameObject); // 3  
 		 Instantiate(explosion, transform.position, Quaternion.identity);
 		
-
 			if(Random.Range(0.0f, 1.0f)> 0.7f){
 			
-				GameObject temp_floor = Instantiate(powerup_prefab, transform.position, Quaternion.identity) ;
+				Instantiate(powerup_prefab, transform.position, Quaternion.identity) ;
 			}
+			 Destroy(gameObject); // 3  
         }
     }
 }

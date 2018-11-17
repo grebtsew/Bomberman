@@ -110,6 +110,9 @@ public class Player_Controller : Controller
 
         go.GetComponent<Bomb>().explode_size = player.explosion_power;
         go.GetComponent<Bomb>().player = player;
+        if(player.canKick){
+        go.GetComponent<Rigidbody>().isKinematic = false; // make bomb kickable
+        }
         }
     }
 }

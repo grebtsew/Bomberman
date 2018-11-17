@@ -7,15 +7,13 @@ public class Bomb : MonoBehaviour {
 
 public Player player;
 
-private Rigidbody rb;
 public int explode_size = 2;
 public GameObject explosionPrefab;
 private bool exploded = false;
 
 	// Use this for initialization
 	void Start () {
-    rb = GetComponent<Rigidbody>();
-		Invoke("Explode", 3f);
+ 		Invoke("Explode", 3f);
 	}
 	
 	// Update is called once per frame
@@ -26,7 +24,7 @@ private bool exploded = false;
 	void Explode() 
 {
 // center one
-Instantiate(explosionPrefab, transform.position, Quaternion.identity); //1
+Instantiate(explosionPrefab, Round(transform.position), Quaternion.identity); //1
 
 
 StartCoroutine(CreateExplosions(Vector3.forward));
@@ -35,13 +33,16 @@ StartCoroutine(CreateExplosions(Vector3.back));
 StartCoroutine(CreateExplosions(Vector3.left));  
 
 
-
 GetComponent<MeshRenderer>().enabled = false; //2
 exploded = true; 
 transform.Find("Collider").gameObject.SetActive(false); //3
 Destroy(gameObject, .3f); //4
 player.bombs++;
 } 
+
+private Vector3 Round(Vector3 v){
+      return new Vector3(Mathf.RoundToInt(v.x),Mathf.RoundToInt(v.y),Mathf.RoundToInt(v.z));
+}
 
 private IEnumerator CreateExplosions(Vector3 direction) 
 {
@@ -53,7 +54,7 @@ for (int i = 1; i <= explode_size; i++)
   //2
   RaycastHit hit; 
   //3
-  Physics.Raycast(transform.position , direction, out hit, 
+  Physics.Raycast(Round(transform.position) , direction, out hit, 
     i); 
 
   //4
@@ -67,7 +68,6 @@ for (int i = 1; i <= explode_size; i++)
   { //7
 
   
-
     if(hit.collider.CompareTag("Breakable")){
         instantiate_list.Add(transform.position + (i * direction));
     } else if(hit.collider.CompareTag("Player") || hit.collider.CompareTag("powerup") || hit.collider.CompareTag("Bomb")){

@@ -1,46 +1,83 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Global_Game_Controller : MonoBehaviour {
 
-
-/** TODOLIST
-
-animated Text
-
-Boss battles
-
-Dialog 
-
-Animationer
-
-GUI
-
-Make the bombs "pushable", so you can escape bombs next to you and push them towards your opponent
-
-Menu
-
-Phone ready
-
-Fix ai stack overflow buggs
- **/
+ 
+	private Text level_label;
+	private Text enemy_label;
 
 	public GameObject map_parent;
 	public Map map;
 
 	// Use this for initialization
 	void Start () {
-		// increase map size over maps
+		// init labels
+		 foreach(Text t in FindObjectsOfType<Text>()){
+                switch(t.tag){
+                    case "enemies":
+                    enemy_label = t;
+                    break;
+					case "level":
+                    level_label = t;
+                    break;
+				}
+		 }
 
+		update_labels();
+
+		// increase map size over maps
 			if(PlayerPrefs.GetInt("current_level").ToString().Length == 0){
 				 PlayerPrefs.SetInt("current_level", 1);
 				 }
 
 		int level = PlayerPrefs.GetInt("current_level");
 
-		map = new Map(1,11 ,11 , map_parent);
 
+		if(level <= 8){
+			map =  gameObject.AddComponent<Map>();
+			map.construct(1+level,11,11 , map_parent);
+		} else {
+			map =  gameObject.AddComponent<Map>();
+			map.construct(1+level,11 +(level-8)*2,11+(level-8)*2 , map_parent);
+		}
+		
+	}
+
+	public void update_labels(){
+		int i = 0;
+		foreach(Player a in FindObjectsOfType<Player>()){
+			if(a.isActiveAndEnabled){
+				i++;
+			}
+		}
+		enemy_label.text = (i-1).ToString();
+		level_label.text = PlayerPrefs.GetInt("current_level").ToString();
+	}
+
+	public void Restart(){
+
+
+	// get animation
+				fade_script fade = new fade_script();
+			// init fader
+        foreach(fade_script f in FindObjectsOfType<fade_script>()){
+            if(f.tag == "fader"){
+               fade = f;
+            } else {
+               continue;
+            }
+        }
+		
+		// reset values
+
+
+		// load map
+		StartCoroutine(fade.FadeAndLoadScene(fade_script.FadeDirection.In, "Game"));
+           
+       
 	}
 
 }

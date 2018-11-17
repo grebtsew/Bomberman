@@ -24,7 +24,6 @@ private ArrayList wait_bombs = new ArrayList();
 private Vector3 next_pos;
 private Vector3 next_dir;
 private ArrayList path = new ArrayList();
-private bool acting = false;
 private struct dir_dist{
    public Vector3 dir;
    public int dist;
@@ -109,7 +108,6 @@ private ArrayList detections;
                     
                     calculate_next_dodge_pos(detections);
                     
-                    acting = true;
                     state = AI_STATES.DODGE;
                     break;
                 } else {
@@ -191,7 +189,6 @@ private ArrayList detections;
 
             //5 Center - center player to box to detect correctly!
             if(transform.position != Round(transform.position)){
-                    acting = true;
                     state = AI_STATES.CENTER;   
             }
             break;
@@ -357,7 +354,7 @@ private ArrayList detections;
 
              } else {
                 if(transform.position != Round(transform.position)){
-                    acting = true;
+               
                     state = AI_STATES.CENTER;   
             } else {
                 state = AI_STATES.IDLE;
@@ -386,7 +383,6 @@ private ArrayList detections;
                       
                     calculate_next_dodge_pos(detections);
                     
-                    acting = true;
                     state = AI_STATES.DODGE;
             }
         }
@@ -505,13 +501,11 @@ private ArrayList detections;
 
     // get position with highest potential    
         foreach(dir_dist d in curr_det){
-            if(temp.dir == null){
-                temp = d;
-            } else {
+           
                 if(d.path_value > temp.path_value){
                     temp = d;
                 }
-            }
+            
         }
         next_pos = transform.position + temp.dir;
         next_dir = temp.dir;
@@ -565,7 +559,6 @@ private ArrayList detections;
 
         // done!
         if(Vector3.Distance(transform.position, position) == 0){
-             acting = false; // reached goal
             
              state = AI_STATES.IDLE; // ai idle 
             

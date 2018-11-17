@@ -12,11 +12,13 @@ public class camera_follow_player : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		
+
 		if(player_controller != null){
 
 		
 		player_controller = FindObjectOfType<Player_Controller>();
-		offset = transform.position - player_controller.transform.position;
+		offset =new Vector3(-1,0,-4) ;
 		}
 	}
 	

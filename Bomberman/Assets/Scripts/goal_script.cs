@@ -16,6 +16,7 @@ public class goal_script : MonoBehaviour {
 	}
 
 	
+
 	  void OnCollisionEnter(Collision collision)
     
     {
@@ -30,11 +31,19 @@ public class goal_script : MonoBehaviour {
 			
 			 PlayerPrefs.Save();
 
-			
-
+			fade_script fade = new fade_script();
+			// init fader
+        foreach(fade_script f in FindObjectsOfType<fade_script>()){
+            if(f.tag == "fader"){
+               fade = f;
+            } else {
+               continue;
+            }
+        }
 			//if not done
+
 			// load map
-            SceneManager.LoadScene("Game");
+			StartCoroutine(fade.FadeAndLoadScene(fade_script.FadeDirection.In, "Game"));
            
         }
     }
