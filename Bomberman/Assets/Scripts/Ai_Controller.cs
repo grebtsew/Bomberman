@@ -26,10 +26,11 @@ private Vector3 next_dir;
 private ArrayList path = new ArrayList();
 private struct dir_dist{
    public Vector3 dir;
-   public int dist;
+   public int dist ;
    public string tag;
    public int path_value ;
 }
+
 private Player player;
 private Rigidbody rigidBody;
  private Animator animator;
@@ -38,7 +39,7 @@ private ArrayList detections;
 // Use this for initialization
 	void Start () {
         player = GetComponent<Player>();
-        rigidBody = GetComponent<Rigidbody> ();
+        rigidBody = GetComponent<Rigidbody>();
          animator = transform.Find ("PlayerModel").GetComponent<Animator> ();
 
         // some intresting variables to shift
@@ -164,7 +165,7 @@ private ArrayList detections;
                       path  = calculate_path_to(transform.position, get_random_walkable_node_position());
                     break;
                     case AI_MOVE_MODE.FARM:
-                          path  = calculate_next_closest_breakable(transform.position);
+                          path  = calculate_next_closest_breakable(Round(transform.position));
                     break;
                     case AI_MOVE_MODE.DEFENSIVE:
                         path = calculate_safe_position_path(transform.position);
@@ -195,31 +196,38 @@ private ArrayList detections;
         }
     }
 
+
     private ArrayList calculate_next_closest_breakable(Vector3 position)
     {
+      
         /* Create an arraylist of size =1 that shows way to a breakable */
         ArrayList p = new ArrayList();
         dir_dist next = new dir_dist();
         bool next_set = false;
-        foreach(dir_dist d in get_closest_collisions(position)){
-            if(next.dist == 0){
-                    next = d;
-                    next_set = true;
-                    continue;
-            }
-            
+        ArrayList t = get_closest_collisions(position);
+      //  next = (dir_dist) t[UnityEngine.Random.Range(0, 3)];
+        foreach(dir_dist d in t){
             if(d.tag == "Breakable"){
                 if(d.dist < next.dist){
                     next = d;
-                   
+                    next_set = true;
                 }
             } 
         }
 
         if(next_set){
-             p.Add(position + next.dir);
-        } 
+         p.Add(position + Round(next.dir));
+         } else {
+             foreach(dir_dist d in t){
+                if(d.dist >= 1){
+                  next = d;
+                next_set = true;
+            }
+         }
+          p.Add(position + Round(next.dir));
+         }
        
+      
         return p;
     }
 
@@ -230,16 +238,16 @@ private ArrayList detections;
         ArrayList result = new ArrayList();
         Vector3 currentpos = startpos;
         Map temp = FindObjectOfType<Global_Game_Controller>().map;
-       
+       Vector3 old_pos = startpos;
 
         while (!done){
             if(currentpos == goal){
                 done = true;
                 continue;
             }
-
+            old_pos = currentpos;
             foreach(dir_dist d in get_closest_collisions(currentpos)){
-                Vector3 temp_pos = currentpos+d.dir;
+                Vector3 temp_pos = Round(currentpos+d.dir);
                  if(temp.is_walkable((int)temp_pos.x,(int) temp_pos.z)){
                 if(Math.Abs(goal.x- temp_pos.x) < Math.Abs(goal.x-currentpos.x) || 
                 Math.Abs(goal.z-temp_pos.z) < Math.Abs(goal.z-currentpos.z)){
@@ -250,6 +258,11 @@ private ArrayList detections;
                 }
                 }
             }
+
+            if(currentpos == old_pos){
+                // no change!
+                done = true; // else endless loop
+            }  
         }
         return result;
     }
@@ -360,17 +373,16 @@ private ArrayList detections;
                 state = AI_STATES.IDLE;
             }
         }
-            
-        } else {
-            state = AI_STATES.IDLE;
-            return;
-        }
-
-        // done!
+         // done!
         if(Vector3.Distance(transform.position, (Vector3) path[0]) == 0){
         
             path.RemoveAt(0);
             
+        }
+            
+        } else {
+            state = AI_STATES.IDLE;
+           
         }
     }
 

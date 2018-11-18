@@ -26,7 +26,7 @@ public class Global_Game_Controller : MonoBehaviour {
 				}
 		 }
 
-		update_labels();
+		
 
 		// increase map size over maps
 			if(PlayerPrefs.GetInt("current_level").ToString().Length == 0){
@@ -43,6 +43,8 @@ public class Global_Game_Controller : MonoBehaviour {
 			map =  gameObject.AddComponent<Map>();
 			map.construct(1+level,11 +(level-8)*2,11+(level-8)*2 , map_parent);
 		}
+
+		update_labels();
 		
 	}
 
@@ -53,7 +55,21 @@ public class Global_Game_Controller : MonoBehaviour {
 				i++;
 			}
 		}
-		enemy_label.text = (i-1).ToString();
+
+			if(i <= 1){
+			if(FindObjectOfType<door_script>()){
+				
+			Destroy(FindObjectOfType<door_script>().gameObject);
+			}
+		}
+
+		if(i > 0){
+			i-= 1;
+		}
+
+		enemy_label.text = (i).ToString();
+	
+
 		level_label.text = PlayerPrefs.GetInt("current_level").ToString();
 	}
 

@@ -180,6 +180,7 @@ public void update_label(POWERUPS powerup){
                
                 StartCoroutine(gameover_wait());
             } else {
+                FindObjectOfType<Global_Game_Controller>().update_labels();
                 Destroy(gameObject);
             }
             // 3 
@@ -189,7 +190,7 @@ public void update_label(POWERUPS powerup){
                 if(GetComponent<Player_Controller>().isActiveAndEnabled){
                 StartCoroutine(dmg_animation());
                 } else {
-                    FindObjectOfType<Global_Game_Controller>().update_labels();
+                   
                 }
             respawning = true;
             StartCoroutine(respawn_wait());
