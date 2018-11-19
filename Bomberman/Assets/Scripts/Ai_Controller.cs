@@ -150,7 +150,7 @@ private ArrayList detections;
             if(follow){
                 if(path.Count == 0){ // ready for next goal
                 
-                switch(move_mode){
+                 switch(move_mode){
                     case AI_MOVE_MODE.AGGRESSIVE:
                         // find player
                         foreach(Player_Controller p in FindObjectsOfType<Player_Controller>()){
@@ -165,7 +165,9 @@ private ArrayList detections;
                       path  = calculate_path_to(transform.position, get_random_walkable_node_position());
                     break;
                     case AI_MOVE_MODE.FARM:
-                          path  = calculate_next_closest_breakable(Round(transform.position));
+                    
+                          path  = calculate_next_closest_breakable(Round(transform.position), detections);
+                           
                     break;
                     case AI_MOVE_MODE.DEFENSIVE:
                         path = calculate_safe_position_path(transform.position);
@@ -187,6 +189,7 @@ private ArrayList detections;
 
                 }             
             }
+            
 
             //5 Center - center player to box to detect correctly!
             if(transform.position != Round(transform.position)){
@@ -197,14 +200,14 @@ private ArrayList detections;
     }
 
 
-    private ArrayList calculate_next_closest_breakable(Vector3 position)
+    private ArrayList calculate_next_closest_breakable(Vector3 position, ArrayList det)
     {
       
         /* Create an arraylist of size =1 that shows way to a breakable */
         ArrayList p = new ArrayList();
         dir_dist next = new dir_dist();
         bool next_set = false;
-        ArrayList t = get_closest_collisions(position);
+        ArrayList t = det;
       //  next = (dir_dist) t[UnityEngine.Random.Range(0, 3)];
         foreach(dir_dist d in t){
             if(d.tag == "Breakable"){
@@ -547,13 +550,13 @@ private ArrayList detections;
     }
     }
 
-
     private void move(Vector3 direction, Vector3 position){
 
         // move to exact location over deltatime
-        Vector3 movePosition = Vector3.MoveTowards(transform.position, position, player.moveSpeed * Time.deltaTime);
+        Vector3 movePosition = Vector3.MoveTowards(transform.position, position, (player.moveSpeed/2) * Time.deltaTime);
 
-        rigidBody.MovePosition(movePosition);
+        // Android don't like rigidbody.movement
+        transform.position = movePosition;
 
         // player rotation
         if(direction == Vector3.forward){

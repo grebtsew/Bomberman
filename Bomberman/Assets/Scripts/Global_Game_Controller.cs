@@ -26,7 +26,6 @@ public class Global_Game_Controller : MonoBehaviour {
 				}
 		 }
 
-		PlayerPrefs.SetInt("current_level", 8);
 
 		// increase map size over maps
 			if(PlayerPrefs.GetInt("current_level").ToString().Length == 0){
