@@ -45,7 +45,13 @@ public class goal_script : MonoBehaviour {
 			//if not done
 
 			// load map
-			StartCoroutine(fade.FadeAndLoadScene(fade_script.FadeDirection.In, "Game"));
+			     if (Application.CanStreamedLevelBeLoaded("Game"))
+     {
+		StartCoroutine(GameObject.FindObjectOfType<fade_script>().FadeAndLoadScene(fade_script.FadeDirection.In, "Game"));
+	 } else {
+		 	StartCoroutine(GameObject.FindObjectOfType<fade_script>().FadeAndLoadScene(fade_script.FadeDirection.In, "Game_mobile"));
+	
+	 }
 			 }
         }
     }

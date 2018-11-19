@@ -6,6 +6,8 @@ using System;
 public class Player_Controller : Controller
 {
 
+    private string FireAxis = "Fire 1";
+
     public bool canDropBombs = true;
     //Can the player drop bombs?
     public bool canMove = true;
@@ -18,10 +20,20 @@ public class Player_Controller : Controller
     private Transform myTransform;
     private Animator animator;
     private Player player;
+    private bool mobile;
+
 
     // Use this for initialization
     void Start ()
     {
+	     if (Application.CanStreamedLevelBeLoaded("Game"))
+     {
+		mobile = false;
+	 } else {
+		mobile = true;
+	
+	 }
+
         player = GetComponent<Player>();
         //Cache the attached components for better performance and less typing
         rigidBody = GetComponent<Rigidbody> ();
@@ -42,10 +54,7 @@ public class Player_Controller : Controller
     {
         animator.SetBool ("Walking", false);
 
-        if (!canMove)
-        { //Return if player can't move
-            return;
-        }
+
 
         //Depending on the player number, use different input for moving
         UpdatePlayer2Movement ();
@@ -58,50 +67,76 @@ public class Player_Controller : Controller
     /// </summary>
     private void UpdatePlayer2Movement ()
     {
-        if (Input.GetKey (KeyCode.UpArrow))
+    
+    if (Input.GetButton("Up"))
+       
         { //Up movement
+     
             rigidBody.velocity = new Vector3 (rigidBody.velocity.x, rigidBody.velocity.y, player.moveSpeed);
             myTransform.rotation = Quaternion.Euler (0, 0, 0);
             animator.SetBool ("Walking", true);
         }
 
-        if (Input.GetKey (KeyCode.LeftArrow))
+        if (Input.GetButton("Left"))
         { //Left movement
             rigidBody.velocity = new Vector3 (-player.moveSpeed, rigidBody.velocity.y, rigidBody.velocity.z);
             myTransform.rotation = Quaternion.Euler (0, 270, 0);
             animator.SetBool ("Walking", true);
         }
 
-        if (Input.GetKey (KeyCode.DownArrow))
+        if (Input.GetButton("Down"))
         { //Down movement
             rigidBody.velocity = new Vector3 (rigidBody.velocity.x, rigidBody.velocity.y, -player.moveSpeed);
             myTransform.rotation = Quaternion.Euler (0, 180, 0);
             animator.SetBool ("Walking", true);
         }
 
-        if (Input.GetKey (KeyCode.RightArrow))
+        if (Input.GetButton("Right"))
         { //Right movement
             rigidBody.velocity = new Vector3 (player.moveSpeed, rigidBody.velocity.y, rigidBody.velocity.z);
             myTransform.rotation = Quaternion.Euler (0, 90, 0);
             animator.SetBool ("Walking", true);
         }
 
-        if (canDropBombs && (Input.GetKeyDown (KeyCode.KeypadEnter) || Input.GetKeyDown (KeyCode.Return)))
+        if(mobile){
+        Vector3 vel = new Vector3 (Input.GetAxis("Horizontal")*player.moveSpeed, rigidBody.velocity.y, Input.GetAxis("Vertical")*player.moveSpeed);
+        if(vel != rigidBody.velocity){
+        rigidBody.velocity = vel;
+         myTransform.rotation = Quaternion.Euler (0, FindDegree(Input.GetAxis("Horizontal"),  Input.GetAxis("Vertical")), 0);
+            animator.SetBool ("Walking", true);
+        }
+        }
+        
+        
+      
+        
+        
+
+        if (canDropBombs && (Input.GetKeyDown (KeyCode.KeypadEnter) || Input.GetKeyDown (KeyCode.Return) || Input.GetButtonDown("Submit")))
         { //Drop Bomb. For Player 2's bombs, allow both the numeric enter as the return key or players 
             //without a numpad will be unable to drop bombs
-           if(player.bombs != 0){
-
-           player.bombs--;
+          
             DropBomb ();
-            }
+            
         }
     }
+
+     public static float FindDegree(float x, float y){
+     float value = (float)((Mathf.Atan2(x, y) / Math.PI) * 180f);
+     if(value < 0) value += 360f;
+ 
+     return value;
+ }
 
     /// <summary>
     /// Drops a bomb beneath the player
     /// </summary>
-    private void DropBomb ()
+    public void DropBomb ()
     {
+         if(player.bombs != 0){
+
+           player.bombs--;
+
         if (bombPrefab)
         { //Check if bomb prefab is assigned first
        GameObject go = Instantiate(bombPrefab, new Vector3(Mathf.RoundToInt(myTransform.position.x), 
@@ -112,6 +147,7 @@ public class Player_Controller : Controller
         go.GetComponent<Bomb>().player = player;
         if(player.canKick){
         go.GetComponent<Rigidbody>().isKinematic = false; // make bomb kickable
+        }
         }
         }
     }

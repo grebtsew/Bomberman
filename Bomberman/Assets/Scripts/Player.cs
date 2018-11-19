@@ -180,8 +180,9 @@ public void update_label(POWERUPS powerup){
                
                 StartCoroutine(gameover_wait());
             } else {
-                FindObjectOfType<Global_Game_Controller>().update_labels();
+               
                 Destroy(gameObject);
+                 FindObjectOfType<Global_Game_Controller>().update_labels();
             }
             // 3 
             

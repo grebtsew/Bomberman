@@ -26,7 +26,7 @@ public class Global_Game_Controller : MonoBehaviour {
 				}
 		 }
 
-		
+		PlayerPrefs.SetInt("current_level", 8);
 
 		// increase map size over maps
 			if(PlayerPrefs.GetInt("current_level").ToString().Length == 0){
@@ -44,7 +44,7 @@ public class Global_Game_Controller : MonoBehaviour {
 			map.construct(1+level,11 +(level-8)*2,11+(level-8)*2 , map_parent);
 		}
 
-		update_labels();
+		
 		
 	}
 
@@ -91,7 +91,13 @@ public class Global_Game_Controller : MonoBehaviour {
 
 
 		// load map
-		StartCoroutine(fade.FadeAndLoadScene(fade_script.FadeDirection.In, "Game"));
+				     if (Application.CanStreamedLevelBeLoaded("Game"))
+     {
+		StartCoroutine(GameObject.FindObjectOfType<fade_script>().FadeAndLoadScene(fade_script.FadeDirection.In, "Game"));
+	 } else {
+		 	StartCoroutine(GameObject.FindObjectOfType<fade_script>().FadeAndLoadScene(fade_script.FadeDirection.In, "Game_mobile"));
+	
+	 }
            
        
 	}

@@ -18,7 +18,7 @@ public class powerup_script : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 	
-		powerup = (POWERUPS)Random.Range(0, 4);
+		powerup = (POWERUPS)Random.Range(0, 5);
 
 		// load prefab look
 		switch(powerup){
