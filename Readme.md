@@ -5,20 +5,24 @@ I started by going through a tutorial, see link below.
 Then I added content and functions to make a more complete game.
 
 # How to start?
-The game is compatible with the following platforms:
-* Android - Put .apk file on android system, install and run.
-* Windows - Just execute the .exe file in Release folder.
-* xCode (iOS) - needs to be built in xCode 10 or later.
+The game is developed to work with for Android, Windows and xCode.
+In order to keep this repo within reasenable size, the releases won't be included
+in this repo. To start, open project in unity. And :
+* Unity - Run application in unity editor
+* Android - Build for android, Put .apk file on android system, install and run.
+* Windows - Build for windows, Just execute the .exe file in Release folder.
+* xCode (iOS) - Build for xCode, needs to be built in xCode 10 or later.
 
 # About the Game
 Bomberman is a game developed for Sega Saturn. Today many releases of Bomberman exist.
 The main goal of the game is to eliminate the enemies, by dropping bombs, to be the last man standing.
 In this version of the game a door opens when you are alone on the map.
 Exit through the door to move to a more advanced level.
-This results in an endless game.
+This game is endless.
+
 
 As mentioned above, this version assume from a tutorial.
- The features that I have implemented are mainly:
+ The features that I have implemented on my own are mainly:
 
 * Mission progression - a mission progression system.
 * Map generation - generate maps depending on level.

@@ -5,27 +5,20 @@ using UnityEngine.UI;
 
 public class Mission_Text_Script : MonoBehaviour {
 
-/*	string full_string = "Welcome to my 26th birthday party, one o'clock on saturday the first of december."+
-	" The receipt will be at Studievägen 5 in Linköping. Coordinates to party location: 58.403975, 15.579573."+
-	" Regarding parking space, there are many parking lots closeby next to the forest."+
-	" To get there, drive towards Kårallen and follow the Olaus Magnus Väg all the way to the gravel parking."+
-	" Coordinates to parking lots: 58.403871, 15.576743. " +
-	" Cheers Grebtsew ";
-*/
 	string s_1 =  "Welcome ";
-	string secret_1 = "to my 26th birthday party,";
-	string secret_2 = " one o'clock on saturday ";
-	string s_2 = " first of december." ;
-	string s_3 = " The receipt will be at ";
-	string secret_3 = " Studievägen 5 in Linköping." ;
-	string secret_4 = " Coordinates to party location: 58.403975, 15.579573.";
-	string s_4 = " Regarding parking space, ";
-	string secret_5 = "there are many parking lots closeby next to the forest.";
-	string s_5 = "To get there, drive towards Kårallen and ";
-	string secret_6 = " follow the Olaus Magnus Väg";
-	string s_6 = " all the way to the gravel parking."  ;
-	string secret_7 = " Coordinates to parking lots: 58.403871, 15.576743." ;
-	string s_7 =  "\n"+ "Cheers Daniel Westberg";
+	string secret_1 = "This is the story about ";
+	string secret_2 = " a small game development project ";
+	string s_2 = "  First of " ;
+	string s_3 = " this is a Bomberman game. ";
+	string secret_3 = " Hope you like it. " ;
+	string secret_4 = " Here is an example of how level progression could work. ";
+	string s_4 = " Text ";
+	string secret_5 = " secret ";
+	string s_5 = "Text ";
+	string secret_6 = " Secret";
+	string s_6 = " text"  ;
+	string secret_7 = " secret." ;
+	string s_7 =  "\n"+ "Cheers  Grebtsew";
 
 	// Use this for initialization
 	void Start () {
