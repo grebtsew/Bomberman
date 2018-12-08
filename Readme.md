@@ -51,6 +51,10 @@ Drop bomb - Enter
 
 Move - Arrows
 
+# Gameplay
+![gameplay](gameplay.gif)
+
+
 # Source
 Sources used during the development are described below.
 

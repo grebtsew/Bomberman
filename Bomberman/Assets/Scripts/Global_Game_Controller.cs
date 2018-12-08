@@ -14,6 +14,9 @@ public class Global_Game_Controller : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+
+		 Application.targetFrameRate = 30;
+
 		// init labels
 		 foreach(Text t in FindObjectsOfType<Text>()){
                 switch(t.tag){
@@ -34,7 +37,7 @@ public class Global_Game_Controller : MonoBehaviour {
 
 		int level = PlayerPrefs.GetInt("current_level");
 
-
+		
 		if(level <= 8){
 			map =  gameObject.AddComponent<Map>();
 			map.construct(1+level,11,11 , map_parent);
