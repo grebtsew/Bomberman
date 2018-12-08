@@ -54,6 +54,9 @@ Move - Arrows
 # Gameplay
 ![gameplay](gameplay.gif)
 
+This gif is created using "ScreenToGif".
+
+See source here : https://github.com/NickeManarin/ScreenToGif
 
 # Source
 Sources used during the development are described below.
