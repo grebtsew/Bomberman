@@ -1,12 +1,19 @@
 # Endless Bomberman in unity3d for phone and pc
 
-This project is a endless Bomberman implementation developed in Unity3d.
+This project is a endless Bomberman implementation developed in Unity3d 2017.
 I started by going through a tutorial, see link below.
 Then I added content and functions to make a more complete game.
 
+![gameplay](./images/gameplay.gif)
+
+This gif is created using `ScreenToGif`.
+
+See source here : https://github.com/NickeManarin/ScreenToGif
+
+
 # How to start?
 The game is developed to work with for Android, Windows and xCode.
-In order to keep this repo within reasenable size, the releases won't be included
+In order to keep this repo within reasonable size, the releases won't be included
 in this repo. To start, open project in unity. And :
 * Unity - Run application in unity editor
 * Android - Build for android, Put .apk file on android system, install and run.
@@ -17,7 +24,8 @@ in this repo. To start, open project in unity. And :
 Bomberman is a game developed for Sega Saturn. Today many releases of Bomberman exist.
 The main goal of the game is to eliminate the enemies, by dropping bombs, to be the last man standing.
 In this version of the game a door opens when you are alone on the map.
-Exit through the door to move to a more advanced level.
+Exit through the door to move to next level.
+Each level increase the size of the game world and the amount of enemies and their difficulty.
 This game is endless.
 
 
@@ -35,8 +43,8 @@ The bots can be set to several behavior modes.
 
 # Screenshots
 See screenshots below:
-![mobile_image](mobile_screenshot.png)
-![pc_image](pc_screenshot.png)
+![mobile_image](./images/mobile_screenshot.png)
+![pc_image](./images/pc_screenshot.png)
 
 # Keys
 Key descriptions
@@ -51,12 +59,6 @@ Drop bomb - Enter
 
 Move - Arrows
 
-# Gameplay
-![gameplay](gameplay.gif)
-
-This gif is created using "ScreenToGif".
-
-See source here : https://github.com/NickeManarin/ScreenToGif
 
 # Source
 Sources used during the development are described below.
@@ -76,3 +78,9 @@ https://www.raywenderlich.com/244-how-to-make-a-game-like-bomberman-with-unity
 * Cute Cartoon Mobile GUI - 97 png files! 1.0 - by HONETi
 * Low Poly GUI Kit 1.1c - by SystemEra GmbH
 * PowerUp particles 1.1.2 - by MHLab
+
+# License
+
+This implementations uses an [MIT license](LICENSE).
+
+Read more about permissions [here.](https://choosealicense.com/licenses/mit/)
