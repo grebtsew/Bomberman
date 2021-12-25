@@ -39,11 +39,13 @@ As mentioned above, this version assume from a tutorial.
 The bots can be set to several behavior modes.
 * Meny - several scenes and load animations.
 * GUI - an easy userfriendly gui.
-* Phone Ready - add controlls for phone usage and change some code to better suite phones.
+* Phone Ready - add controls for phone usage and change some code to better suite phones.
 
 # Screenshots
 See screenshots below:
+
 ![mobile_image](./images/mobile_screenshot.png)
+
 ![pc_image](./images/pc_screenshot.png)
 
 # Keys
@@ -58,7 +60,6 @@ Move - Joystick
 Drop bomb - Enter
 
 Move - Arrows
-
 
 # Source
 Sources used during the development are described below.
