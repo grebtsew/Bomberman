@@ -16,7 +16,7 @@ See source here : https://github.com/NickeManarin/ScreenToGif
 
 # How to start?
 
-See latest release for executable. To run using unity3d editor, read below.
+See latest release for executable at https://github.com/grebtsew/Bomberman/releases. To run using unity3d editor, read below.
 The game is developed to work with for Android, Windows and xCode. To start, open project in unity. And :
 
 - Unity - Run application in unity editor
