@@ -21,7 +21,7 @@ namespace LeoLuz
             Vector3 HandlePoint = InitialPoint + Vector3.up * (fullWidthY * analogicKnob.YNormalScope) + Vector3.right * (fullWidthX * analogicKnob.XNormalScope);
             Handles.DrawLine(HandlePoint, HandlePoint +  Vector3.down* fullWidthY*analogicKnob.YNormalScope);
             Handles.DrawLine(HandlePoint, HandlePoint + Vector3.left * fullWidthX * analogicKnob.XNormalScope);
-            HandlePoint = Handles.FreeMoveHandle(HandlePoint, Quaternion.identity, 5f, Vector3.zero, Handles.CubeHandleCap);
+            var fmh_24_63_638269414329951362 = Quaternion.identity; HandlePoint = Handles.FreeMoveHandle(HandlePoint, 5f, Vector3.zero, Handles.CubeHandleCap);
             Vector3 Difference = HandlePoint - InitialPoint;
             Vector3 normal = new Vector2(Difference.x / fullWidthX, Difference.y / fullWidthY);
             analogicKnob.XNormalScope = normal.x;

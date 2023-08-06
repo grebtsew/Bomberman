@@ -48,3 +48,5 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+.vscode
+*.vscode
